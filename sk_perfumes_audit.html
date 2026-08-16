@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Audit Report - SK Perfumes Gallery</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif; background: #f5f7fa; color: #1a1a2e; line-height: 1.7; }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; padding: 50px 40px; border-radius: 16px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+  .header h1 { font-size: 32px; margin-bottom: 10px; }
+  .header .url { font-size: 16px; color: #a0c4ff; word-break: break-all; }
+  .header .date { font-size: 13px; color: #8892b0; margin-top: 8px; }
+  .badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge-red { background: #ffe5e5; color: #c0392b; }
+  .badge-orange { background: #fff3e0; color: #e67e22; }
+  .badge-green { background: #e8f5e9; color: #27ae60; }
+  .score-card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .score-card h2 { font-size: 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .score-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #ddd; }
+  .score-item.red { border-left-color: #e74c3c; }
+  .score-item.orange { border-left-color: #f39c12; }
+  .score-item.green { border-left-color: #27ae60; }
+  .score-val { font-weight: 700; font-size: 18px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+  th { background: #f1f5f9; font-weight: 600; color: #334155; }
+  tr:hover { background: #f8fafc; }
+  .section { background: #fff; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .section h2 { font-size: 22px; margin-bottom: 18px; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+  .section h3 { font-size: 17px; margin: 20px 0 10px; color: #334155; }
+  .section p, .section li { font-size: 14.5px; color: #475569; }
+  .section ul { margin-left: 22px; margin-bottom: 14px; }
+  .section li { margin-bottom: 6px; }
+  .highlight-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+  .critical-box { background: #fef2f2; border-left: 4px solid #ef4444; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+  .good-box { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+  code { background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 13px; }
+  
+  .priority-table th { background: #1e293b; color: #fff; }
+  .priority-table tr:nth-child(even) { background: #f8fafc; }
+  .p0 { color: #dc2626; font-weight: 700; }
+  .p1 { color: #ea580c; font-weight: 700; }
+  .p2 { color: #ca8a04; font-weight: 700; }
+  .p3 { color: #2563eb; font-weight: 700; }
+
+  /* AUDITOR BANNER */
+  .auditor-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #fff; border-radius: 16px; padding: 28px; margin-top: 30px; text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+  .auditor-card h3 { font-size: 20px; margin-bottom: 8px; color: #38bdf8; }
+  .auditor-card p { font-size: 14.5px; color: #cbd5e1; margin-bottom: 20px; }
+  .wa-btn {
+    display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: #fff;
+    padding: 12px 28px; border-radius: 50px; font-weight: 700; text-decoration: none; font-size: 15px;
+    box-shadow: 0 6px 20px rgba(37,211,102,0.3); transition: transform 0.2s ease;
+  }
+  .wa-btn:hover { transform: translateY(-2px); background: #22c35e; }
+
+  .footer { text-align: center; padding: 30px; color: #94a3b8; font-size: 13px; }
+
+  /* FLOATING WHATSAPP BUTTON */
+  .floating-wa {
+    position: fixed; bottom: 24px; right: 24px; z-index: 999;
+    background: #25D366; color: white; width: 56px; height: 56px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 28px; text-decoration: none;
+    box-shadow: 0 10px 30px rgba(37,211,102,0.4);
+    transition: transform 0.3s ease;
+  }
+  .floating-wa:hover { transform: scale(1.1); }
+
+  @media print { 
+    body { background: #fff; } 
+    .container { max-width: 100%; padding: 20px; } 
+    .floating-wa { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>🌐 Website Audit Report</h1>
+    <div class="url">https://skperfumesgallery.com/</div>
+    <div class="date">Audit Date: August 16, 2026 &nbsp;|&nbsp; Platform: WordPress + WooCommerce + Elementor &nbsp;|&nbsp; Server: LiteSpeed + PHP 8.3</div>
+  </div>
+
+  <div class="score-card">
+    <h2>📊 Executive Summary</h2>
+    <div class="score-grid">
+      <div class="score-item red"><span>Meta Tags & Descriptions</span><span class="score-val">2/10</span></div>
+      <div class="score-item red"><span>Image Alt Texts</span><span class="score-val">4/10</span></div>
+      <div class="score-item orange"><span>Index Page Structure</span><span class="score-val">5/10</span></div>
+      <div class="score-item green"><span>404 Page Handling</span><span class="score-val">8/10</span></div>
+      <div class="score-item orange"><span>On-Page SEO</span><span class="score-val">5/10</span></div>
+      <div class="score-item orange"><span>Performance & Speed</span><span class="score-val">4/10</span></div>
+      <div class="score-item red"><span>Security Headers</span><span class="score-val">2/10</span></div>
+      <div class="score-item orange"><span>Structured Data</span><span class="score-val">5/10</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>1️⃣ Meta Tags & Descriptions <span class="badge badge-red">Very Poor</span></h2>
+    <div class="critical-box">
+      <strong>🔴 CRITICAL ISSUES FOUND</strong> — Meta descriptions are completely missing across all tested pages. This is one of the most basic SEO requirements.
+    </div>
+    <table>
+      <tr><th>Page</th><th>Title Tag</th><th>Meta Description</th><th>Status</th></tr>
+      <tr><td>Homepage</td><td><code>HOME - SK perfumes gallery</code></td><td><strong>MISSING</strong></td><td><span class="badge badge-red">Critical</span></td></tr>
+      <tr><td>Product (Ghazi)</td><td><code>Ghazi - SK perfumes gallery</code></td><td><strong>MISSING</strong></td><td><span class="badge badge-red">Critical</span></td></tr>
+      <tr><td>Shop Page</td><td><code>- SK perfumes gallery</code> (Empty!)</td><td><strong>MISSING</strong></td><td><span class="badge badge-red">Critical</span></td></tr>
+      <tr><td>Category Pages</td><td>Not tested individually</td><td>Likely missing</td><td><span class="badge badge-orange">High Risk</span></td></tr>
+    </table>
+
+    <h3>Open Graph (Social Media) Issues</h3>
+    <ul>
+      <li>Homepage OG Description is <strong>dumping the entire page content</strong> (hundreds of words). It should be a clean 1–2 sentence summary.</li>
+      <li>Product page OG Type is set to <code>article</code> instead of <code>product</code>.</li>
+      <li>Product price and currency OG tags are <strong>missing</strong> from product pages.</li>
+      <li>OG Image is present but not optimized for social sharing dimensions.</li>
+    </ul>
+
+    <div class="highlight-box">
+      <strong>💡 Fix:</strong> Install/configure Yoast SEO or Rank Math properly. Write unique meta descriptions (150–160 characters) for every page and product. Set OG Type to <code>product</code> on product pages.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>2️⃣ Image Alt Texts <span class="badge badge-orange">Poor</span></h2>
+    <div class="critical-box">
+      <strong>🟠 HIGH ISSUES FOUND</strong> — Multiple images lack descriptive alt text, harming both accessibility and SEO.
+    </div>
+
+    <h3>Homepage (14 images total)</h3>
+    <ul>
+      <li><strong>5 images have EMPTY alt text</strong> (<code>alt=""</code>)</li>
+      <li><strong>1 image has a terrible filename/alt:</strong> <code>450470697_1130293281370615_483537095379889838_n</code> (Facebook export name)</li>
+      <li>Several images use <strong>ChatGPT-generated filenames</strong> like <code>ChatGPT_Image_Sep_27__2025...</code> — bad for SEO</li>
+      <li>Only 9 images have descriptive alt text</li>
+    </ul>
+
+    <h3>Product Page (Ghazi)</h3>
+    <ul>
+      <li>Main gallery images have <strong>empty alt attributes</strong></li>
+      <li>One image labeled simply <code>Placeholder</code></li>
+      <li>Related products have alt text, but main product images do not</li>
+    </ul>
+
+    <div class="highlight-box">
+      <strong>💡 Fix:</strong> Add descriptive alt text to every image. Example: <code>"Ghazi 50ml EDP Unisex Perfume by SK Perfumes Gallery"</code> instead of empty or random filenames.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>3️⃣ Index Page (Homepage) Structure <span class="badge badge-orange">Moderate Issues</span></h2>
+
+    <h3>Heading Hierarchy</h3>
+    <table>
+      <tr><th>Tag</th><th>Count</th><th>Assessment</th></tr>
+      <tr><td><code>&lt;H1&gt;</code></td><td>1</td><td><strong>"New Arrivals"</strong> — ❌ Wrong. Should be the main business keyword like <em>"Buy Premium Perfumes Online in UAE | SK Perfumes Gallery"</em></td></tr>
+      <tr><td><code>&lt;H2&gt;</code></td><td>17</td><td>❌ Too many. Product names like "Great Man", "Silver Shine" should be <code>H3</code>, not <code>H2</code></td></tr>
+      <tr><td><code>&lt;H3&gt;</code></td><td>4</td><td>✅ Good for subsections</td></tr>
+      <tr><td><code>&lt;H4&gt;–&lt;H6&gt;</code></td><td>0</td><td>—</td></tr>
+    </table>
+
+    <h3>Content Quality</h3>
+    <ul>
+      <li>✅ Content is keyword-rich and relevant to UAE audience</li>
+      <li>✅ Good internal linking (137 internal links found)</li>
+      <li>✅ Schema.org structured data is present (WebPage + PerfumeStore + BreadcrumbList)</li>
+    </ul>
+
+    <div class="highlight-box">
+      <strong>💡 Fix:</strong> Change H1 to brand-focused text. Demote product names from H2 to H3. Keep H2 for true section headers only.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>4️⃣ 404 Page Handling <span class="badge badge-green">Good</span></h2>
+    <div class="good-box">
+      <strong>🟢 WORKING CORRECTLY</strong>
+    </div>
+    <ul>
+      <li>✅ Returns proper <strong>HTTP 404 status code</strong></li>
+      <li>✅ Title: <code>Page not found - SK perfumes gallery</code></li>
+      <li>✅ Contains <code>noindex</code> tag to prevent Google from indexing broken pages</li>
+      <li>✅ Has user-friendly "not found" text</li>
+    </ul>
+    <div class="highlight-box">
+      <strong>💡 Minor Fix:</strong> Add a search bar and links back to Shop/Collections on the 404 page for better user experience.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>5️⃣ On-Page SEO <span class="badge badge-orange">Mixed Results</span></h2>
+
+    <h3>✅ What's Working</h3>
+    <ul>
+      <li>SSL/HTTPS enabled</li>
+      <li>XML Sitemap present (<code>/sitemap_index.xml</code>) via Yoast SEO</li>
+      <li><code>robots.txt</code> properly configured with sitemap reference</li>
+      <li>Canonical URLs present on most pages</li>
+      <li>Mobile viewport tag present</li>
+      <li>Breadcrumbs working on product pages</li>
+      <li>Google Analytics / GTM installed</li>
+      <li>Social links present (WhatsApp, Facebook, Instagram)</li>
+      <li>Contact email found: <code>order@skperfumesgallery.com</code></li>
+      <li>WhatsApp integration: <code>wa.me/971554904128</code></li>
+    </ul>
+
+    <h3>❌ What's Broken</h3>
+    <ul>
+      <li><strong>No Product Schema</strong> — Product pages are missing <code>Product</code> structured data (price, availability, rating, SKU). Only generic <code>PerfumeStore</code> schema exists.</li>
+      <li><strong>No LocalBusiness Schema</strong> — Missing address, phone, and local business markup for UAE.</li>
+      <li><strong>No Hreflang Tags</strong> — UAE-focused site should have <code>en-AE</code> or <code>ar-AE</code> targeting.</li>
+      <li><strong>Duplicate Content Risk</strong> — Shop page pagination may cause duplicate title/description issues.</li>
+      <li><strong>Keyword Cannibalization Risk</strong> — Multiple pages targeting "SK perfume UAE" without clear differentiation.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>6️⃣ Performance & PageSpeed <span class="badge badge-orange">Poor</span></h2>
+    <div class="critical-box">
+      <strong>🔴 MAJOR BOTTLENECKS DETECTED</strong>
+    </div>
+
+    <table>
+      <tr><th>Metric</th><th>Finding</th><th>Severity</th></tr>
+      <tr><td>Server</td><td>LiteSpeed + GZIP enabled</td><td><span class="badge badge-green">Good</span></td></tr>
+      <tr><td>HTML Size</td><td>256 KB (Very large)</td><td><span class="badge badge-orange">High</span></td></tr>
+      <tr><td>Stylesheets</td><td>28 external CSS files</td><td><span class="badge badge-red">Critical</span></td></tr>
+      <tr><td>JavaScript</td><td>35 external scripts</td><td><span class="badge badge-red">Critical</span></td></tr>
+      <tr><td>Render Blocking</td><td>Most scripts lack <code>async</code>/<code>defer</code></td><td><span class="badge badge-red">Critical</span></td></tr>
+      <tr><td>Image Formats</td><td>Only 1 WebP out of 14 images</td><td><span class="badge badge-orange">High</span></td></tr>
+      <tr><td>Lazy Loading</td><td><strong>0 images have <code>loading="lazy"</code></strong></td><td><span class="badge badge-red">Critical</span></td></tr>
+      <tr><td>Image Sizes</td><td><code>arabia-valley-2.png</code> = <strong>1.7 MB</strong></td><td><span class="badge badge-red">Critical</span></td></tr>
+      <tr><td>jQuery</td><td>Legacy jQuery still loaded</td><td><span class="badge badge-orange">Medium</span></td></tr>
+      <tr><td>Font Loading</td><td>4 Google Font families loaded</td><td><span class="badge badge-orange">Medium</span></td></tr>
+    </table>
+
+    <div class="highlight-box">
+      <strong>📉 Estimated Google PageSpeed Insights Score:</strong><br>
+      Mobile: <strong>25–40 / 100</strong> &nbsp;|&nbsp; Desktop: <strong>45–60 / 100</strong>
+    </div>
+
+    <h3>Priority Performance Fixes</h3>
+    <ol>
+      <li>Convert all images to <strong>WebP</strong> format</li>
+      <li>Enable <strong>lazy loading</strong> on all below-the-fold images</li>
+      <li>Compress the 1.7 MB PNG immediately (use TinyPNG or Squoosh)</li>
+      <li>Combine/minify CSS and JS files (Elementor generates too many separate files)</li>
+      <li>Add <code>defer</code> to non-critical scripts</li>
+      <li>Consider a caching plugin (WP Rocket or LiteSpeed Cache)</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>7️⃣ Security <span class="badge badge-red">Critical Gaps</span></h2>
+    <div class="critical-box">
+      <strong>🔴 MISSING SECURITY HEADERS</strong> — These headers protect against clickjacking, MIME sniffing, and downgrade attacks.
+    </div>
+
+    <table>
+      <tr><th>Header</th><th>Status</th></tr>
+      <tr><td>Strict-Transport-Security (HSTS)</td><td><span class="badge badge-red">Missing</span></td></tr>
+      <tr><td>X-Frame-Options</td><td><span class="badge badge-red">Missing</span></td></tr>
+      <tr><td>X-Content-Type-Options</td><td><span class="badge badge-red">Missing</span></td></tr>
+      <tr><td>Referrer-Policy</td><td><span class="badge badge-red">Missing</span></td></tr>
+      <tr><td>Content-Security-Policy</td><td><span class="badge badge-orange">Partial</span> (only <code>upgrade-insecure-requests</code>)</td></tr>
+    </table>
+
+    <div class="highlight-box">
+      <strong>💡 Fix:</strong> Add these headers via <code>.htaccess</code> or LiteSpeed server config to prevent clickjacking and MIME-type sniffing attacks.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>8️⃣ Structured Data (Schema.org)</h2>
+    <table>
+      <tr><th>Schema Type</th><th>Found On</th><th>Status</th></tr>
+      <tr><td><code>WebPage</code></td><td>Homepage, Product</td><td><span class="badge badge-green">Present</span></td></tr>
+      <tr><td><code>PerfumeStore</code></td><td>Homepage, Product</td><td><span class="badge badge-green">Present</span></td></tr>
+      <tr><td><code>BreadcrumbList</code></td><td>Product</td><td><span class="badge badge-green">Present</span></td></tr>
+      <tr><td><code>Product</code> (with price, SKU, availability)</td><td>Product Pages</td><td><span class="badge badge-red">Missing</span></td></tr>
+      <tr><td><code>LocalBusiness</code></td><td>All Pages</td><td><span class="badge badge-red">Missing</span></td></tr>
+      <tr><td><code>FAQPage</code></td><td>All Pages</td><td><span class="badge badge-red">Missing</span></td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Final Recommendations (Priority Order)</h2>
+    <table class="priority-table">
+      <tr><th>Priority</th><th>Action</th><th>Impact</th></tr>
+      <tr><td class="p0">P0 — Critical</td><td>Write meta descriptions for ALL pages</td><td>SEO + Click-Through Rate</td></tr>
+      <tr><td class="p0">P0 — Critical</td><td>Add <code>Product</code> schema with price/availability/SKU</td><td>Rich Snippets in Google</td></tr>
+      <tr><td class="p0">P0 — Critical</td><td>Compress/convert images to WebP; fix 1.7 MB PNG</td><td>PageSpeed + Rankings</td></tr>
+      <tr><td class="p1">P1 — High</td><td>Fix homepage H1 and heading hierarchy</td><td>SEO</td></tr>
+      <tr><td class="p1">P1 — High</td><td>Add alt text to all product images</td><td>Accessibility + SEO</td></tr>
+      <tr><td class="p1">P1 — High</td><td>Add missing security headers</td><td>Security + Trust</td></tr>
+      <tr><td class="p2">P2 — Medium</td><td>Enable lazy loading on all images</td><td>PageSpeed</td></tr>
+      <tr><td class="p2">P2 — Medium</td><td>Minify/combine CSS & JS files</td><td>PageSpeed</td></tr>
+      <tr><td class="p2">P2 — Medium</td><td>Add <code>LocalBusiness</code> schema for UAE</td><td>Local SEO</td></tr>
+      <tr><td class="p3">P3 — Low</td><td>Optimize 404 page with search bar & links</td><td>User Experience</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>📝 Final Verdict</h2>
+    <div class="critical-box">
+      <strong>The developer did the basics</strong> (WordPress setup, SSL, sitemap, analytics, 404 handling) <strong>but left critical SEO and performance work incomplete.</strong>
+    </div>
+    <p>The site is <strong>not ready for competitive ranking</strong> in the UAE perfume market because:</p>
+    <ol>
+      <li><strong>Meta descriptions are completely missing</strong> — Google will auto-generate poor snippets, killing click-through rates.</li>
+      <li><strong>Product structured data is absent</strong> — Google won't show prices, ratings, or stock status in search results.</li>
+      <li><strong>Images are unoptimized</strong> — A single 1.7 MB PNG and zero lazy loading will destroy mobile PageSpeed scores.</li>
+      <li><strong>Security headers are missing</strong> — The site is vulnerable to basic attacks.</li>
+    </ol>
+    <div class="good-box">
+      <strong>Bottom line:</strong> It looks like a standard WordPress/WooCommerce installation with minimal optimization. The client should request the developer or an SEO specialist to resolve the <strong>P0 and P1</strong> issues immediately.
+    </div>
+  </div>
+
+  <!-- AUDITOR BANNER & CONTACT -->
+  <div class="auditor-card">
+    <h3>🔍 Need These Critical SEO & Speed Bottlenecks Fixed?</h3>
+    <p>Audit performed by <strong>Muhammad Hamza</strong> (Technical SEO & Web Specialist)</p>
+    <a href="https://wa.me/923127834611?text=Hi%20Hamza%2C%20I%20reviewed%20the%20SK%20Perfumes%20Audit%20Report%20and%20want%20to%20discuss%20fixing%20the%20issues." target="_blank" rel="noopener noreferrer" class="wa-btn">
+      💬 Contact Muhammad Hamza on WhatsApp (+92 312 7834611)
+    </a>
+  </div>
+
+  <div class="footer">
+    Report generated on August 16, 2026 · Technical Audit & Analysis by Muhammad Hamza (+92 312 7834611).<br>
+    For questions or full SEO implementation, consult directly via WhatsApp.
+  </div>
+
+</div>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/923127834611?text=Hi%20Hamza%2C%20I%20have%20a%20question%20regarding%20the%20SK%20Perfumes%20Audit%20Report." target="_blank" rel="noopener noreferrer" class="floating-wa" title="Chat on WhatsApp">
+  💬
+</a>
+
+</body>
+</html>
